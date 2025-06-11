@@ -1,0 +1,10 @@
+.env/
+node_modules/
+.vscode/
+com_users/
+sem_users/
+com_users_logs/
+db_config.php
+com_users_sem_logs/
+1/
+config_segura.php
