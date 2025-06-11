@@ -22,6 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+include_once $_SERVER['DOCUMENT_ROOT'] . '/inc/versao.php';
+$base = '/Secullum'; // Ou o valor correto para a sua aplicação
+
 // A primeira coisa que fazemos é chamar nosso session.php.
 // Isso garante que session_name() seja chamado ANTES de session_start().
 require_once 'session.php'; 
@@ -88,6 +91,27 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Meta Tags Básicas -->
+    <meta name="description" content="Secullum Repositório" />
+    <meta name="keywords" content="site, links, lanches, Secullum" />
+    <meta name="author" content="Douglas Silva" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:title" content="Secullum Repositório" />
+    <meta property="og:description" content="Secullum Repositório" />
+    <meta property="og:url" content="https://www.dougllassillva27.com.br" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://dougllassillva27.com.br/<?= versao("$base/logo-social-share.webp") ?>">
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:site_name" content="Secullum Repositório" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Secullum Repositório" />
+    <meta name="twitter:description" content="Secullum Repositório" />
+
     <title>Login - Repositório Secullum</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }

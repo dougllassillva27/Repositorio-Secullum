@@ -36,6 +36,26 @@ if (!is_admin()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- Meta Tags Básicas -->
+    <meta name="description" content="Secullum Repositório" />
+    <meta name="keywords" content="site, links, lanches, Secullum" />
+    <meta name="author" content="Douglas Silva" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:title" content="Secullum Repositório" />
+    <meta property="og:description" content="Secullum Repositório" />
+    <meta property="og:url" content="https://www.dougllassillva27.com.br" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://dougllassillva27.com.br/<?= versao("$base/logo-social-share.webp") ?>">
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:site_name" content="Secullum Repositório" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Secullum Repositório" />
+    <meta name="twitter:description" content="Secullum Repositório" />
     <title>Gerenciar Links</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="<?= versao("$base/admin.css") ?>">
