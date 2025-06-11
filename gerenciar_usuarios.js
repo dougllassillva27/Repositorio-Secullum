@@ -20,6 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */ /**
+ * Lógica específica para a página de Gerenciamento de Usuários.
+ * Depende de utils.js para funções de API e modais.
  */
 document.addEventListener('DOMContentLoaded', () => {
   // --- Elementos do DOM ---
@@ -32,83 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputUsername = document.getElementById('user-username');
   const inputPassword = document.getElementById('user-password');
 
-  // Elementos do Modal de Feedback
-  const feedbackModal = document.getElementById('feedback-modal');
-  const feedbackModalTitle = document.getElementById('feedback-modal-title');
-  const feedbackModalMessage = document.getElementById('feedback-modal-message');
-  const feedbackModalOkBtn = document.getElementById('feedback-modal-ok');
-
-  // Elementos do Modal de Confirmação
-  const confirmModal = document.getElementById('confirm-modal');
-  const confirmModalMessage = document.getElementById('confirm-modal-message');
-  const confirmModalCancelBtn = document.getElementById('confirm-modal-cancel');
-
-  // --- Lógica dos Modais ---
-
-  function showFeedbackModal(message, title = 'Sucesso') {
-    feedbackModalTitle.textContent = title;
-    feedbackModalMessage.textContent = message;
-    feedbackModal.style.display = 'flex';
-    feedbackModalOkBtn.focus();
-  }
-
-  function closeFeedbackModal() {
-    feedbackModal.style.display = 'none';
-  }
-
-  feedbackModalOkBtn.addEventListener('click', closeFeedbackModal);
-  feedbackModal.addEventListener('click', (e) => {
-    if (e.target === feedbackModal) closeFeedbackModal();
-  });
-  document.addEventListener('keyup', (e) => {
-    if (feedbackModal.style.display === 'flex' && (e.key === 'Enter' || e.key === 'Escape')) {
-      closeFeedbackModal();
-    }
-  });
-
-  // Função genérica para exibir o modal de confirmação
-  function showConfirmModal(message, onConfirm) {
-    confirmModalMessage.textContent = message;
-    confirmModal.style.display = 'flex';
-
-    // O cloneNode resolve o problema de múltiplos eventos sendo adicionados ao mesmo botão
-    const confirmModalConfirmBtn = document.getElementById('confirm-modal-confirm');
-    const newConfirmBtn = confirmModalConfirmBtn.cloneNode(true);
-    confirmModalConfirmBtn.parentNode.replaceChild(newConfirmBtn, confirmModalConfirmBtn);
-
-    // Adiciona o novo evento de confirmação
-    newConfirmBtn.addEventListener('click', () => {
-      closeConfirmModal();
-      onConfirm(); // Executa a ação de callback
-    });
-  }
-
-  function closeConfirmModal() {
-    confirmModal.style.display = 'none';
-  }
-
-  confirmModalCancelBtn.addEventListener('click', closeConfirmModal);
-  confirmModal.addEventListener('click', (e) => {
-    if (e.target === confirmModal) closeConfirmModal();
-  });
-
-  // --- Funções Principais ---
-
-  async function apiCall(action, method = 'POST', body = null) {
-    try {
-      const options = { method, headers: { 'Content-Type': 'application/json' } };
-      if (body) options.body = JSON.stringify(body);
-      const response = await fetch(`api.php?action=${action}`, options);
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || `Erro na API: ${response.statusText}`);
-      return result;
-    } catch (error) {
-      showFeedbackModal(error.message, 'Erro');
-      return null;
-    }
-  }
+  // --- Funções Específicas da Página ---
 
   async function carregarUsuarios() {
+    // A função 'apiCall' agora vem de utils.js
     const response = await apiCall('read_users', 'GET');
     if (response && response.success) {
       renderizarUsuarios(response.users);
@@ -154,14 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const userId = userItem.dataset.userid;
     const username = userItem.querySelector('.user-info strong').textContent;
     const role = userItem.querySelector('.user-info .role').textContent;
+
     formTitle.textContent = 'Editar Usuário';
     btnAddUpdate.textContent = 'Salvar Alteração';
     btnCancelEdit.style.display = 'inline-block';
+
     inputUserId.value = userId;
     inputUsername.value = username;
     document.querySelector(`input[name="role"][value="${role}"]`).checked = true;
     inputPassword.value = '';
     inputPassword.placeholder = 'Deixe em branco para não alterar';
+
     form.scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -169,12 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const userItem = e.target.closest('.user-item');
     const userId = userItem.dataset.userid;
     const username = userItem.querySelector('strong').textContent;
-
     const message = `Tem certeza que deseja excluir o usuário "${username}"? Esta ação não pode ser desfeita.`;
 
+    // A função 'showConfirmModal' agora vem de utils.js
     showConfirmModal(message, async () => {
       const result = await apiCall('delete_user', 'POST', { id: userId });
       if (result && result.success) {
+        // A função 'showFeedbackModal' agora vem de utils.js
         showFeedbackModal(result.message);
         carregarUsuarios();
       }
@@ -189,6 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     inputUserId.value = '';
     inputPassword.placeholder = 'Senha para novo usuário';
   }
+
+  // --- Inicialização e Eventos da Página ---
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -208,5 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnCancelEdit.addEventListener('click', resetarFormulario);
 
+  // Carga inicial dos dados
   carregarUsuarios();
 });

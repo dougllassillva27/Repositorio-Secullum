@@ -20,6 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */ /**
+ * Lógica específica para a página de Gerenciamento de Links e Categorias.
+ * Depende de utils.js para funções de API e modais.
  */
 document.addEventListener('DOMContentLoaded', () => {
   // --- Referências ao DOM ---
@@ -39,80 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputNewCategoryDashboard = document.getElementById('link-new-category-dashboard');
   const checkShowOnDashboard = document.getElementById('link-show-on-dashboard');
   const checkOpenInNewTab = document.getElementById('link-open-in-new-tab');
-
-  // Modais
   const categoryModal = document.getElementById('category-edit-modal');
   const categoryModalInput = document.getElementById('modal-category-name-input');
   const categoryModalDashboardNameInput = document.getElementById('modal-category-dashboard-name-input');
   const categoryModalSaveBtn = document.getElementById('modal-save-button');
   const categoryModalCancelBtn = document.getElementById('modal-cancel-button');
 
-  const feedbackModal = document.getElementById('feedback-modal');
-  const feedbackModalTitle = document.getElementById('feedback-modal-title');
-  const feedbackModalMessage = document.getElementById('feedback-modal-message');
-  const feedbackModalOkBtn = document.getElementById('feedback-modal-ok');
-
-  const confirmModal = document.getElementById('confirm-modal');
-  const confirmModalMessage = document.getElementById('confirm-modal-message');
-  const confirmModalCancelBtn = document.getElementById('confirm-modal-cancel');
-
+  // --- Variáveis de Estado da Página ---
   let editingCategoryId = null;
   let localData = { categories: [] };
 
-  // --- Lógica dos Modais ---
-  function showFeedbackModal(message, title = 'Sucesso') {
-    feedbackModalTitle.textContent = title;
-    feedbackModalMessage.textContent = message;
-    feedbackModal.style.display = 'flex';
-    feedbackModalOkBtn.focus();
-  }
-  function closeFeedbackModal() {
-    feedbackModal.style.display = 'none';
-  }
-  feedbackModalOkBtn.addEventListener('click', closeFeedbackModal);
-  feedbackModal.addEventListener('click', (e) => {
-    if (e.target === feedbackModal) closeFeedbackModal();
-  });
-  document.addEventListener('keyup', (e) => {
-    if (feedbackModal.style.display === 'flex' && (e.key === 'Enter' || e.key === 'Escape')) {
-      closeFeedbackModal();
-    }
-  });
-
-  function showConfirmModal(message, onConfirm) {
-    confirmModalMessage.textContent = message;
-    confirmModal.style.display = 'flex';
-    const confirmModalConfirmBtn = document.getElementById('confirm-modal-confirm');
-    const newConfirmBtn = confirmModalConfirmBtn.cloneNode(true);
-    confirmModalConfirmBtn.parentNode.replaceChild(newConfirmBtn, confirmModalConfirmBtn);
-    newConfirmBtn.addEventListener('click', () => {
-      closeConfirmModal();
-      onConfirm();
-    });
-  }
-  function closeConfirmModal() {
-    confirmModal.style.display = 'none';
-  }
-  confirmModalCancelBtn.addEventListener('click', closeConfirmModal);
-  confirmModal.addEventListener('click', (e) => {
-    if (e.target === confirmModal) closeConfirmModal();
-  });
-
-  // --- Funções Principais ---
-  async function apiCall(action, method = 'POST', body = null) {
-    try {
-      const options = { method, headers: { 'Content-Type': 'application/json' } };
-      if (body) options.body = JSON.stringify(body);
-      const response = await fetch(`api.php?action=${action}`, options);
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || `Erro na API: ${response.statusText}`);
-      return result;
-    } catch (error) {
-      showFeedbackModal(error.message, 'Erro');
-      return null;
-    }
-  }
-
+  // --- Funções Específicas da Página ---
   async function carregarDados() {
     const response = await apiCall('read_all', 'GET');
     if (response && response.categories) {
@@ -125,26 +65,25 @@ document.addEventListener('DOMContentLoaded', () => {
     linkListContainer.innerHTML = '';
     selectCategory.innerHTML = '<option value="">Selecione uma categoria...</option>';
     if (!localData.categories) localData.categories = [];
+
     localData.categories.forEach((category) => {
       const categoryBlock = document.createElement('div');
       categoryBlock.className = 'category-block';
       categoryBlock.dataset.categoryId = category.id;
+
       const categoryHeader = document.createElement('div');
       categoryHeader.className = 'category-header';
       categoryHeader.innerHTML = `
         <h2 title="Arraste para reordenar a categoria"><span class="drag-handle">✥</span><span>${category.name}</span></h2>
         <div>
-          <button class="btn btn-sm btn-editar btn-editar-categoria" 
-            data-category-id="${category.id}" 
-            data-category-name="${category.name}" 
-            data-category-dashboard-name="${category.dashboard_name || ''}" 
-            title="Editar Nomes da Categoria">Editar</button>
+          <button class="btn btn-sm btn-editar btn-editar-categoria" data-category-id="${category.id}" data-category-name="${category.name}" data-category-dashboard-name="${category.dashboard_name || ''}" title="Editar Nomes da Categoria">Editar</button>
           <button class="btn btn-sm btn-excluir btn-excluir-categoria" data-category-id="${category.id}" title="Excluir Categoria">Excluir</button>
         </div>`;
-      categoryBlock.appendChild(categoryHeader);
+
       const linksContainer = document.createElement('div');
       linksContainer.className = 'links-container';
       linksContainer.dataset.categoryId = category.id;
+
       if (category.links) {
         category.links.forEach((link) => {
           const linkRow = document.createElement('div');
@@ -160,13 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
           linksContainer.appendChild(linkRow);
         });
       }
+
+      categoryBlock.appendChild(categoryHeader);
       categoryBlock.appendChild(linksContainer);
       linkListContainer.appendChild(categoryBlock);
+
       const option = document.createElement('option');
       option.value = category.id;
       option.textContent = category.name;
       selectCategory.appendChild(option);
     });
+
     addEventListeners();
     initSortable();
   }
@@ -225,11 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newName = categoryModalInput.value.trim();
     const newDashboardName = categoryModalDashboardNameInput.value.trim();
     if (newName) {
-      const result = await apiCall('update_category', 'POST', {
-        id: editingCategoryId,
-        name: newName,
-        dashboard_name: newDashboardName,
-      });
+      const result = await apiCall('update_category', 'POST', { id: editingCategoryId, name: newName, dashboard_name: newDashboardName });
       if (result && result.success) {
         closeCategoryEditModal();
         carregarDados();
@@ -237,22 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  categoryModalSaveBtn.addEventListener('click', saveCategoryName);
-  categoryModalCancelBtn.addEventListener('click', closeCategoryEditModal);
-  categoryModal.addEventListener('click', (e) => {
-    if (e.target === categoryModal) closeCategoryEditModal();
-  });
-  categoryModalInput.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') saveCategoryName();
-  });
-  categoryModalDashboardNameInput.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') saveCategoryName();
-  });
-
   function initSortable() {
-    new Sortable(linkListContainer, { animation: 150, handle: '.category-header', ghostClass: 'sortable-ghost', onEnd: () => updateLocalDataOrder() });
+    new Sortable(linkListContainer, { animation: 150, handle: '.category-header', ghostClass: 'sortable-ghost', onEnd: updateLocalDataOrder });
     document.querySelectorAll('.links-container').forEach((container) => {
-      new Sortable(container, { animation: 150, group: 'links', handle: '.drag-handle', ghostClass: 'sortable-ghost', onEnd: () => updateLocalDataOrder() });
+      new Sortable(container, { animation: 150, group: 'links', handle: '.drag-handle', ghostClass: 'sortable-ghost', onEnd: updateLocalDataOrder });
     });
   }
 
@@ -285,12 +212,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     if (!linkToEdit) return;
+
     form.classList.add('editing');
     formTitle.textContent = 'Editar Link';
     btnAddUpdate.textContent = 'Salvar Alteração';
-    btnAddUpdate.classList.remove('btn-primary');
-    btnAddUpdate.classList.add('btn-editar');
     btnCancelEdit.style.display = 'inline-block';
+
     inputLinkId.value = linkToEdit.id;
     inputLinkText.value = linkToEdit.text;
     inputDashboardText.value = linkToEdit.dashboard_text;
@@ -300,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkShowOnDashboard.checked = !!parseInt(linkToEdit.showOnDashboard);
     checkOpenInNewTab.checked = !!parseInt(linkToEdit.openInNewTab);
     document.querySelector(`input[name="visibilidade"][value="${linkToEdit.visibilidade}"]`).checked = true;
+
     form.scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -309,11 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
     inputLinkId.value = '';
     formTitle.textContent = 'Adicionar Novo Link';
     btnAddUpdate.textContent = 'Adicionar Link';
-    btnAddUpdate.classList.remove('btn-editar');
-    btnAddUpdate.classList.add('btn-primary');
     btnCancelEdit.style.display = 'none';
     selectCategory.value = '';
   }
+
+  // --- Inicialização e Eventos da Página ---
 
   btnCancelEdit.addEventListener('click', resetarFormulario);
 
@@ -322,11 +250,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const action = isEditing ? 'update_link' : 'add_link';
     let categoria_id = selectCategory.value;
     let new_category_name = inputNewCategory.value.trim();
-    let new_category_dashboard_name = inputNewCategoryDashboard.value.trim();
+
     if (!categoria_id && !new_category_name) {
       showFeedbackModal('Por favor, selecione uma categoria existente ou crie uma nova.', 'Atenção');
       return;
     }
+
     const linkData = {
       id: inputLinkId.value,
       text: inputLinkText.value,
@@ -338,8 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
       visibilidade: document.querySelector('input[name="visibilidade"]:checked').value,
       categoria_id: new_category_name ? 'new' : categoria_id,
       new_category_name: new_category_name,
-      new_category_dashboard_name: new_category_dashboard_name,
+      new_category_dashboard_name: inputNewCategoryDashboard.value.trim(),
     };
+
     const result = await apiCall(action, 'POST', linkData);
     if (result && result.success) {
       resetarFormulario();
@@ -355,5 +285,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  categoryModalSaveBtn.addEventListener('click', saveCategoryName);
+  categoryModalCancelBtn.addEventListener('click', closeCategoryEditModal);
+  categoryModal.addEventListener('click', (e) => {
+    if (e.target === categoryModal) closeCategoryEditModal();
+  });
+  categoryModalInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') saveCategoryName();
+  });
+  categoryModalDashboardNameInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') saveCategoryName();
+  });
+
+  // Carga inicial dos dados
   carregarDados();
 });

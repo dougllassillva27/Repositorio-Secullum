@@ -38,7 +38,7 @@ if (!is_admin()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Links</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="<?= versao("$base/gerenciar_links.css") ?>">
+    <link rel="stylesheet" href="<?= versao("$base/admin.css") ?>">
 </head>
 <body>
     <div class="container">
@@ -121,6 +121,7 @@ if (!is_admin()) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="<?= versao("$base/utils.js") ?>"></script>
     <script src="<?= versao("$base/gerenciar_links.js") ?>"></script>
 </body>
 </html>

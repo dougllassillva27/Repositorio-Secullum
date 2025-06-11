@@ -169,7 +169,7 @@ function create_slug($text) {
             </div>
         </div>
     </div>
-
+<script src="<?= versao("$base/utilis.js") ?>"></script>
     <script src="<?= versao("$base/script.js") ?>"></script>
 </body>
 </html>
