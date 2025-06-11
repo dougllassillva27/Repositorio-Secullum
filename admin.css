@@ -22,31 +22,84 @@
  * SOFTWARE.
  */
 /**
- * Estilos Unificados para a Área de Gerenciamento
+ * Estilos Unificados para a Área de Gerenciamento com suporte a Dark Mode.
  */
+
+/* ==========================================================================
+   Definição das Variáveis de Tema para Admin
+   ========================================================================== */
+:root {
+  /* Tema Claro (Padrão) */
+  --admin-cor-fundo: #f4f7f6;
+  --admin-cor-container-fundo: #ffffff;
+  --admin-cor-texto-primario: #333;
+  --admin-cor-texto-secundario: #6c757d;
+  --admin-cor-titulo: #0056b3;
+  --admin-cor-borda: #dee2e6;
+  --admin-cor-borda-leve: #e9ecef;
+  --admin-cor-sombra: rgba(0, 0, 0, 0.08);
+  --admin-cor-form-fundo: #f8f9fa;
+  --admin-cor-input-fundo: #fff;
+  --admin-cor-input-texto: #333;
+  --admin-cor-input-borda: #ced4da;
+  --admin-cor-input-foco-borda: #80bdff;
+  --admin-cor-input-foco-sombra: rgba(0, 123, 255, 0.25);
+  --admin-cor-drag-ghost: #cce5ff;
+
+  /* Cores para Modais */
+  --cor-modal-fundo: #ffffff;
+  --cor-modal-texto: #495057;
+}
+
+html.dark-mode {
+  /* Tema Escuro */
+  --admin-cor-fundo: #212529;
+  --admin-cor-container-fundo: #2c3034;
+  --admin-cor-texto-primario: #f8f9fa;
+  --admin-cor-texto-secundario: #adb5bd;
+  --admin-cor-titulo: #0d6efd;
+  --admin-cor-borda: #495057;
+  --admin-cor-borda-leve: #343a40;
+  --admin-cor-sombra: rgba(0, 0, 0, 0.4);
+  --admin-cor-form-fundo: #343a40;
+  --admin-cor-input-fundo: #495057;
+  --admin-cor-input-texto: #f8f9fa;
+  --admin-cor-input-borda: #6c757d;
+  --admin-cor-input-foco-borda: #0d6efd;
+  --admin-cor-input-foco-sombra: rgba(13, 110, 253, 0.25);
+  --admin-cor-drag-ghost: #0d6efd;
+
+  /* Cores para Modais */
+  --cor-modal-fundo: #343a40;
+  --cor-modal-texto: #f8f9fa;
+}
+
+/* ==========================================================================
+   Aplicação das Variáveis de Tema
+   ========================================================================== */
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f7f6;
-  color: #333;
+  background-color: var(--admin-cor-fundo);
+  color: var(--admin-cor-texto-primario);
   margin: 0;
   padding: 20px;
 }
 .container {
   max-width: 1200px;
   margin: auto;
-  background: white;
+  background: var(--admin-cor-container-fundo);
   padding: 25px 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px var(--admin-cor-sombra);
 }
 h1,
 h2,
 h3 {
-  color: #0056b3;
+  color: var(--admin-cor-titulo);
   margin: 0 0 20px 0;
 }
 h1 {
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--admin-cor-borda);
   padding-bottom: 15px;
 }
 h2 {
@@ -58,10 +111,10 @@ h2 {
 }
 h3 {
   font-size: 1.3em;
-  color: #343a40;
+  color: var(--admin-cor-texto-primario);
 }
 p {
-  color: #6c757d;
+  color: var(--admin-cor-texto-secundario);
 }
 .admin-main-content {
   display: grid;
@@ -69,7 +122,7 @@ p {
   gap: 30px;
 }
 
-/* --- BOTÕES --- */
+/* --- BOTÕES (Cores fixas para manter identidade visual) --- */
 .btn {
   display: inline-block;
   font-weight: 600;
@@ -143,9 +196,9 @@ p {
 /* --- GERENCIAR LINKS --- */
 .category-block {
   margin-bottom: 25px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--admin-cor-borda-leve);
   border-radius: 6px;
-  background-color: #fff;
+  background-color: var(--admin-cor-container-fundo);
 }
 .category-header {
   display: flex;
@@ -153,8 +206,8 @@ p {
   align-items: center;
   padding: 15px 20px;
   cursor: grab;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+  background-color: var(--admin-cor-form-fundo);
+  border-bottom: 1px solid var(--admin-cor-borda);
   border-radius: 6px 6px 0 0;
 }
 .category-header h2 {
@@ -166,25 +219,27 @@ p {
 .category-header:active {
   cursor: grabbing;
 }
+
 .grid-row {
   display: grid;
   grid-template-columns: 30px 1fr auto;
   gap: 15px;
   align-items: start;
   padding: 12px 20px;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--admin-cor-borda-leve);
   cursor: grab;
-  background-color: #fff;
+  background-color: var(--admin-cor-container-fundo);
 }
 .grid-row:last-child {
   border-bottom: none;
 }
 .grid-row:hover {
-  background-color: #f8f9fa;
+  background-color: var(--admin-cor-form-fundo);
 }
+
 .drag-handle {
   text-align: left;
-  color: #adb5bd;
+  color: var(--admin-cor-texto-secundario);
   font-size: 1.2em;
   padding-top: 2px;
 }
@@ -192,7 +247,7 @@ p {
   word-break: break-all;
 }
 .link-info small {
-  color: #6c757d;
+  color: var(--admin-cor-texto-secundario);
 }
 .link-actions button,
 .user-actions button {
@@ -205,22 +260,23 @@ p {
 
 /* --- GERENCIAR USUÁRIOS --- */
 #lista-usuarios-container {
-  background-color: #fff;
+  background-color: var(--admin-cor-container-fundo);
   padding: 20px 25px;
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--admin-cor-borda);
 }
 #lista-usuarios-container h2 {
   margin-top: 0;
   padding-bottom: 15px;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--admin-cor-borda-leve);
 }
+
 .user-item {
   display: flex;
   align-items: center;
   gap: 15px;
   padding: 15px 10px;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--admin-cor-borda-leve);
 }
 .user-item:last-child {
   border-bottom: none;
@@ -253,10 +309,10 @@ p {
 }
 #form-novo-link,
 #form-usuario {
-  background: #f8f9fa;
+  background: var(--admin-cor-form-fundo);
   padding: 25px;
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--admin-cor-borda);
   transition: all 0.3s ease;
 }
 #form-novo-link.editing {
@@ -281,11 +337,12 @@ p {
   gap: 20px;
   align-items: center;
 }
+
 label {
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
-  color: #495057;
+  color: var(--admin-cor-texto-secundario);
 }
 input[type='text'],
 input[type='url'],
@@ -293,17 +350,19 @@ input[type='password'],
 select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--admin-cor-input-borda);
   border-radius: 4px;
   font-size: 1em;
   box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--admin-cor-input-fundo);
+  color: var(--admin-cor-input-texto);
 }
 input:focus,
 select:focus {
-  border-color: #80bdff;
+  border-color: var(--admin-cor-input-foco-borda);
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem var(--admin-cor-input-foco-sombra);
 }
 input[type='checkbox'] {
   margin-right: 5px;
@@ -336,15 +395,16 @@ input[type='checkbox'] {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
 }
 .modal-content {
-  background-color: #fff;
+  background-color: var(--cor-modal-fundo);
+  color: var(--cor-modal-texto);
   padding: 25px 30px;
   border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px var(--admin-cor-sombra);
   width: 90%;
   max-width: 500px;
 }
@@ -360,10 +420,10 @@ input[type='checkbox'] {
 .grid-row.sortable-ghost,
 .category-block.sortable-ghost {
   opacity: 0.4;
-  background-color: #cce5ff;
+  background-color: var(--admin-cor-drag-ghost);
 }
 .grid-row.sortable-drag,
 .category-block.sortable-drag {
   opacity: 0.9;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px var(--admin-cor-sombra);
 }

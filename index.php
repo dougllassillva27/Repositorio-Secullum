@@ -67,29 +67,10 @@ function create_slug($text) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <!-- Meta Tags Básicas -->
-    <meta name="description" content="Secullum Repositório" />
-    <meta name="keywords" content="site, links, lanches, Secullum" />
-    <meta name="author" content="Douglas Silva" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Open Graph / Facebook / WhatsApp -->
-    <meta property="og:title" content="Secullum Repositório" />
-    <meta property="og:description" content="Secullum Repositório" />
-    <meta property="og:url" content="https://www.dougllassillva27.com.br" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://dougllassillva27.com.br/<?= versao("$base/logo-social-share.webp") ?>">
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:site_name" content="Secullum Repositório" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Secullum Repositório" />
-    <meta name="twitter:description" content="Secullum Repositório" />
     <title>Repositório Secullum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="<?= versao("$base/style.css") ?>">
+    <link rel="stylesheet" href="<?= versao("$base/admin.css") ?>">
 </head>
 <body>
     <button id="menu-button" aria-label="Alternar menu"><i class="fas fa-bars"></i></button>
@@ -98,11 +79,16 @@ function create_slug($text) {
         <a href="#" id="home-link" class="sidebar-link" data-tooltip="Home" data-slug="home">
             <i class="fas fa-home sidebar-icon"></i><span class="link-text">Home</span>
         </a>
+        
+        <div class="sidebar-separator"></div>
+
         <?php
         if (!empty($categories)) {
             foreach ($categories as $category) {
                 if (empty($category['links'])) continue;
+                
                 echo '<div class="sidebar-category-title">' . htmlspecialchars($category['name']) . '</div>';
+                
                 foreach ($category['links'] as $link) {
                     $newTabAttribute = !empty($link['openInNewTab']) ? 'data-open-in-new-tab="true"' : '';
                     $slug = create_slug($link['text']);
@@ -110,9 +96,13 @@ function create_slug($text) {
                     echo '<a href="#" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['text']) . '" data-slug="' . $slug . '">';
                     echo '<i class="fas ' . $iconClass . ' sidebar-icon"></i><span class="link-text">' . htmlspecialchars($link['text']) . '</span></a>';
                 }
+
+                // AQUI ADICIONAMOS O SEPARADOR APÓS CADA CATEGORIA COM LINKS
+                echo '<div class="sidebar-separator"></div>';
             }
         }
         ?>
+
         <div class="sidebar-footer">
             <?php if (is_admin()): ?>
             <a href="gerenciar_links.php" class="admin-link sidebar-link" target="_blank" title="Gerenciar Links" data-tooltip="Gerenciar Links"><i class="fas fa-link sidebar-icon"></i><span class="link-text">Gerenciar Links</span></a>
@@ -128,9 +118,20 @@ function create_slug($text) {
             </a>
         </div>
     </nav>
+
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="theme-checkbox" title="Alternar tema">
+            <input type="checkbox" id="theme-checkbox" />
+            <div class="slider round">
+                <span class="icon-sun"><i class="fas fa-sun"></i></span>
+                <span class="icon-moon"><i class="fas fa-moon"></i></span>
+            </div>
+        </label>
+    </div>
+
     <main id="main-content">
         <div id="dashboard-content">
-            <h2 class="welcome-title">Bem-vindo, <?= htmlspecialchars($_SESSION['username']) ?>! <br><br></h2>
+            <h2 class="welcome-title">Bem-vindo, <?= htmlspecialchars($_SESSION['username']) ?>!</h2>
             <h1>Painel de Controle</h1>
             <?php
             if (!empty($categories)) {
@@ -189,7 +190,7 @@ function create_slug($text) {
             </div>
         </div>
     </div>
-<script src="<?= versao("$base/utils.js") ?>"></script>
+
     <script src="<?= versao("$base/script.js") ?>"></script>
 </body>
 </html>

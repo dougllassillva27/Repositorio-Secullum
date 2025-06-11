@@ -27,24 +27,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
   const contentFrame = document.getElementById('contentFrame');
   const dashboardContent = document.getElementById('dashboard-content');
-
-  const feedbackModal = document.getElementById('feedback-modal');
-  const feedbackModalTitle = document.getElementById('feedback-modal-title');
-  const feedbackModalMessage = document.getElementById('feedback-modal-message');
-  const feedbackModalOkBtn = document.getElementById('feedback-modal-ok');
-
   const btnChangePassword = document.getElementById('btn-change-password');
   const changePasswordModal = document.getElementById('change-password-modal');
   const changePasswordCancelBtn = document.getElementById('change-password-cancel');
   const changePasswordSaveBtn = document.getElementById('change-password-save');
   const inputNewPassword = document.getElementById('new_password');
   const inputConfirmPassword = document.getElementById('confirm_password');
-
   const tooltip = document.createElement('div');
   tooltip.id = 'js-tooltip';
   document.body.appendChild(tooltip);
 
+  // --- REFERÊNCIAS PARA O TEMA ---
+  const themeCheckbox = document.getElementById('theme-checkbox');
+  const themeSwitchWrapper = document.querySelector('.theme-switch-wrapper');
+
+  // ========================================================================
+  // LÓGICA DO MODO ESCURO (DARK MODE)
+  // ========================================================================
+  const THEME_KEY = 'theme-preference';
+  const rootElement = document.documentElement;
+
+  /**
+   * Aplica o tema (claro ou escuro) e sincroniza o estado do interruptor.
+   * @param {string} theme - O tema a ser aplicado ('dark' or 'light').
+   */
+  const applyTheme = (theme) => {
+    const isDark = theme === 'dark';
+    rootElement.classList.toggle('dark-mode', isDark);
+    if (themeCheckbox) {
+      themeCheckbox.checked = isDark;
+    }
+  };
+
+  // Adiciona o evento de 'change' ao checkbox, se ele existir.
+  if (themeCheckbox) {
+    themeCheckbox.addEventListener('change', () => {
+      const newTheme = themeCheckbox.checked ? 'dark' : 'light';
+      localStorage.setItem(THEME_KEY, newTheme);
+      applyTheme(newTheme);
+    });
+  }
+
+  // Ao carregar a página, aplica o tema salvo para consistência.
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(savedTheme);
+
+  // ========================================================================
+  // LÓGICA EXISTENTE DA PÁGINA
+  // ========================================================================
+
   // --- Lógica dos Modais ---
+  const feedbackModal = document.getElementById('feedback-modal');
+  const feedbackModalTitle = document.getElementById('feedback-modal-title');
+  const feedbackModalMessage = document.getElementById('feedback-modal-message');
+  const feedbackModalOkBtn = document.getElementById('feedback-modal-ok');
+
   function showFeedbackModal(message, title = 'Sucesso') {
     feedbackModalTitle.textContent = title;
     feedbackModalMessage.textContent = message;
@@ -54,15 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeFeedbackModal() {
     feedbackModal.style.display = 'none';
   }
-  feedbackModalOkBtn.addEventListener('click', closeFeedbackModal);
-  feedbackModal.addEventListener('click', (e) => {
-    if (e.target === feedbackModal) closeFeedbackModal();
-  });
-  document.addEventListener('keyup', (e) => {
-    if (feedbackModal.style.display === 'flex' && (e.key === 'Enter' || e.key === 'Escape')) {
-      closeFeedbackModal();
-    }
-  });
 
   function openChangePasswordModal() {
     inputNewPassword.value = '';
@@ -116,21 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Lógica de Roteamento e UI ---
-  function setupTooltips() {
-    /* ... */
-  }
-  function handleTooltipShow(event) {
-    /* ... */
-  }
-  function handleTooltipHide() {
-    /* ... */
-  }
   function toggleMenuState() {
     sidebar.classList.toggle('minimized');
   }
 
   function showDashboard() {
     if (dashboardContent) dashboardContent.style.display = 'block';
+    if (themeSwitchWrapper) themeSwitchWrapper.style.display = 'block'; // MOSTRAR o switch
     if (contentFrame) {
       contentFrame.style.display = 'none';
       contentFrame.src = 'about:blank';
@@ -140,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showIframe(url, clickedElement) {
     if (dashboardContent) dashboardContent.style.display = 'none';
+    if (themeSwitchWrapper) themeSwitchWrapper.style.display = 'none'; // ESCONDER o switch
     if (contentFrame) {
       contentFrame.style.display = 'block';
       try {
@@ -194,13 +215,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (changePasswordSaveBtn) {
     changePasswordSaveBtn.addEventListener('click', saveNewPassword);
   }
+  feedbackModalOkBtn.addEventListener('click', closeFeedbackModal);
+  feedbackModal.addEventListener('click', (e) => {
+    if (e.target === feedbackModal) closeFeedbackModal();
+  });
+  document.addEventListener('keyup', (e) => {
+    if (feedbackModal.style.display === 'flex' && (e.key === 'Enter' || e.key === 'Escape')) {
+      closeFeedbackModal();
+    }
+  });
 
   document.querySelectorAll('.sidebar-link, .dashboard-link-list a').forEach((link) => {
     link.addEventListener('click', handleLinkClick);
   });
   window.addEventListener('popstate', (e) => rotear(e.state));
 
-  // O restante das funções (tooltips) foi omitido por brevidade, mas deve estar aqui
   function setupTooltips() {
     document.querySelectorAll('#sidebar a[data-tooltip]').forEach((l) => {
       l.addEventListener('mouseenter', handleTooltipShow);

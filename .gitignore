@@ -8,3 +8,5 @@ db_config.php
 com_users_sem_logs/
 1/
 config_segura.php
+schema.sql
+schema.sql
