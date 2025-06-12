@@ -279,4 +279,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialSlug = window.location.hash.substring(1) || 'home';
   history.replaceState({ slug: initialSlug }, '', `#${initialSlug}`);
   rotear({ slug: initialSlug });
+
+  // --- OUVINTE PARA AÇÕES VINDAS DO IFRAME ---
+  window.addEventListener('message', (event) => {
+    // Verificação de segurança crucial: só aceita mensagens do seu próprio domínio
+    if (event.origin !== 'https://dougllassillva27.com.br') {
+      console.warn('Mensagem bloqueada de origem não confiável:', event.origin);
+      return;
+    }
+
+    // Verifica se a mensagem tem o formato esperado
+    if (event.data && event.data.type === 'openReport' && event.data.url) {
+      // A página principal, que tem permissão, abre a nova guia
+      console.log('Recebida solicitação para abrir relatório do iframe:', event.data.url);
+      window.open(event.data.url, '_blank');
+    }
+  });
 });

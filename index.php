@@ -77,7 +77,7 @@ function create_slug($text) {
     <meta property="og:description" content="Secullum Repositório" />
     <meta property="og:url" content="https://www.dougllassillva27.com.br" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://dougllassillva27.com.br/<?= versao("$base/logo-social-share.webp") ?>">
+    <meta property="og:image" content="https://dougllassillva27.com.br/<?= versao("$base/img/logo-social-share.webp") ?>">
     <meta property="og:image:width" content="512" />
     <meta property="og:image:height" content="512" />
     <meta property="og:site_name" content="Secullum Repositório" />
@@ -116,7 +116,7 @@ function create_slug($text) {
                     $newTabAttribute = !empty($link['openInNewTab']) ? 'data-open-in-new-tab="true"' : '';
                     $slug = create_slug($link['text']);
                     $iconClass = htmlspecialchars($link['icon'] ?? 'fa-link');
-                    echo '<a href="#" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['text']) . '" data-slug="' . $slug . '">';
+                    echo '<a href="' . htmlspecialchars($link['url']) . '" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['text']) . '" data-slug="' . $slug . '">';
                     echo '<i class="fas ' . $iconClass . ' sidebar-icon"></i><span class="link-text">' . htmlspecialchars($link['text']) . '</span></a>';
                 }
 
@@ -127,8 +127,8 @@ function create_slug($text) {
 
         <div class="sidebar-footer">
             <?php if (is_admin()): ?>
-            <a href="gerenciar_links.php" class="admin-link sidebar-link"  title="Gerenciar Links" data-tooltip="Gerenciar Links"><i class="fas fa-link sidebar-icon"></i><span class="link-text">Gerenciar Links</span></a>
-            <a href="gerenciar_usuarios.php" class="admin-link sidebar-link"  title="Gerenciar Usuários" data-tooltip="Gerenciar Usuários"><i class="fas fa-users-cog sidebar-icon"></i><span class="link-text">Gerenciar Usuários</span></a>
+            <a href="gerenciar_links.php" class="admin-link sidebar-link" title="Gerenciar Links" data-tooltip="Gerenciar Links"><i class="fas fa-link sidebar-icon"></i><span class="link-text">Gerenciar Links</span></a>
+            <a href="gerenciar_usuarios.php" class="admin-link sidebar-link" title="Gerenciar Usuários" data-tooltip="Gerenciar Usuários"><i class="fas fa-users-cog sidebar-icon"></i><span class="link-text">Gerenciar Usuários</span></a>
             <?php endif; ?>
             <a href="#" id="btn-change-password" class="admin-link sidebar-link" title="Alterar Senha" data-tooltip="Alterar Senha">
                 <i class="fas fa-key sidebar-icon"></i>
@@ -168,7 +168,7 @@ function create_slug($text) {
                                 foreach ($dashboard_links_for_category as $link) {
                                     $newTabAttribute = !empty($link['openInNewTab']) ? 'data-open-in-new-tab="true"' : '';
                                     $slug = create_slug($link['dashboard_text'] ?: $link['text']);
-                                    echo '<li><a href="#" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '" data-slug="' . $slug . '">' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '</a></li>';
+                                    echo '<li><a href="' . htmlspecialchars($link['url']) . '" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '" data-slug="' . $slug . '">' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '</a></li>';
                                 }
                                 echo '</ul>';
                             }
