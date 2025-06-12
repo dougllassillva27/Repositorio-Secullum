@@ -23,6 +23,15 @@
  */
 
 /* ==========================================================================
+   Reset de Box Model e Padrões Globais
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
    Definição das Variáveis de Tema
    ========================================================================== */
 :root {
@@ -55,8 +64,8 @@
   --cor-modal-foco-sombra: rgba(0, 123, 255, 0.25);
 
   /* Variáveis de Layout */
-  --sidebar-width-maximized: 180px;
-  --sidebar-width-minimized: 50px;
+  --sidebar-width-maximized: 250px;
+  --sidebar-width-minimized: 60px;
   --menu-button-size: 36px;
   --menu-button-top-left: 7px;
   --sidebar-padding-top: 15px;
@@ -112,23 +121,37 @@ html {
 }
 
 #menu-button {
-  position: fixed;
-  top: var(--menu-button-top-left);
-  left: var(--menu-button-top-left);
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1002;
   background-color: var(--cor-sidebar);
   color: var(--cor-sidebar-texto);
-  border: 1px solid var(--cor-borda);
+  border: none;
+  border-bottom: 1px solid var(--cor-sidebar-borda-footer);
   padding: 0;
   cursor: pointer;
-  border-radius: 4px;
-  width: var(--menu-button-size);
+  border-radius: 0;
+  width: 100%;
   height: var(--menu-button-size);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: flex-start;
+  padding-left: 15px;
+  gap: 10px;
   font-size: 1.2em;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#sidebar.minimized #menu-button {
+  width: 100%;
+  border-bottom: none;
+  justify-content: center;
+  padding-left: 0;
+}
+
+#sidebar.minimized .menu-button-text {
+  display: none;
 }
 
 #menu-button:hover {
@@ -155,11 +178,13 @@ html {
 .sidebar-header {
   height: var(--menu-button-size);
   flex-shrink: 0;
+  position: relative;
 }
 
 #sidebar.minimized {
   width: var(--sidebar-width-minimized);
-  overflow: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #sidebar a.sidebar-link {
@@ -254,14 +279,13 @@ html {
 #main-content {
   margin-left: var(--sidebar-width-maximized);
   width: calc(100% - var(--sidebar-width-maximized));
-  height: 100vh;
+  min-height: 100vh;
   transition: margin-left 0.3s ease-out, width 0.3s ease-out;
   position: relative;
   background-color: var(--cor-fundo-secundario);
-  /* A alteração foi feita aqui */
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 #sidebar.minimized ~ #main-content {
@@ -269,10 +293,26 @@ html {
   width: calc(100% - var(--sidebar-width-minimized));
 }
 
+.content-wrapper {
+  flex-grow: 1;
+  position: relative;
+}
+
 #dashboard-content {
-  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.dashboard-inner-wrapper {
   max-width: 1280px;
   margin: 0 auto;
+  width: 100%;
+  padding: 15px;
 }
 
 .welcome-title {
@@ -321,10 +361,12 @@ html {
 }
 
 #contentFrame {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border: none;
-  display: none;
 }
 
 .sidebar-footer {
@@ -343,7 +385,9 @@ html {
   border-bottom: 2px solid var(--cor-borda);
 }
 
-#dashboard-content > .dashboard-category-title:first-of-type {
+.dashboard-inner-wrapper > h1,
+.dashboard-inner-wrapper > .welcome-title,
+.dashboard-inner-wrapper > .dashboard-category-title:first-of-type {
   margin-top: 10px;
 }
 
@@ -451,13 +495,7 @@ html {
   color: var(--cor-texto-primario);
   border-radius: 4px;
   font-size: 1em;
-  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.modal-content input:focus {
-  border-color: var(--cor-modal-foco-input);
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem var(--cor-modal-foco-sombra);
 }
 
 /* --- ESTILO PARA O TOGGLE SWITCH DO TEMA (ATUALIZADO) --- */
@@ -538,27 +576,48 @@ input:checked + .slider .icon-moon {
   transition-delay: 0s;
 }
 
-/* --- Estilização da Barra de Rolagem da Sidebar --- */
+/* --- Estilização da Barra de Rolagem (Reutilizável) --- */
 /* Para Webkit (Chrome, Safari, Edge) */
-#sidebar::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
-#sidebar::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
-#sidebar::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
-#sidebar::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.6);
 }
 
 /* Para Firefox */
-#sidebar {
+.custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+/* --- Classe de Utilidade para Esconder Elementos --- */
+.d-none {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Estilos Responsivos para Telas Menores
+   ========================================================================== */
+@media (max-width: 992px) {
+  /* --- Ajusta o grid do dashboard para 1 coluna --- */
+  .dashboard-link-list {
+    grid-template-columns: 1fr; /* Força coluna única */
+    gap: 12px; /* Diminui levemente o espaçamento entre os links */
+  }
+
+  /* --- Deixa os botões do dashboard um pouco mais compactos --- */
+  .dashboard-link-list a {
+    padding: 18px 15px;
+  }
 }

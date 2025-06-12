@@ -227,8 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
     checkShowOnDashboard.checked = !!parseInt(linkToEdit.showOnDashboard);
     checkOpenInNewTab.checked = !!parseInt(linkToEdit.openInNewTab);
     document.querySelector(`input[name="visibilidade"][value="${linkToEdit.visibilidade}"]`).checked = true;
-
-    form.scrollIntoView({ behavior: 'smooth' });
   }
 
   function resetarFormulario() {

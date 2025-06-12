@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
   const contentFrame = document.getElementById('contentFrame');
   const dashboardContent = document.getElementById('dashboard-content');
+  const footer = document.getElementById('footer');
   const btnChangePassword = document.getElementById('btn-change-password');
   const changePasswordModal = document.getElementById('change-password-modal');
   const changePasswordCancelBtn = document.getElementById('change-password-cancel');
@@ -42,9 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeSwitchWrapper = document.querySelector('.theme-switch-wrapper');
 
   // ========================================================================
-  // LÓGICA DO MODO ESCURO (DARK MODE)
+  // LÓGICA DE PERSISTÊNCIA DE ESTADO (TEMA E SIDEBAR)
   // ========================================================================
   const THEME_KEY = 'theme-preference';
+  const SIDEBAR_STATE_KEY = 'sidebar-state';
   const rootElement = document.documentElement;
 
   /**
@@ -59,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Adiciona o evento de 'change' ao checkbox, se ele existir.
+  // Adiciona o evento de 'change' ao checkbox do tema, se ele existir.
   if (themeCheckbox) {
     themeCheckbox.addEventListener('change', () => {
       const newTheme = themeCheckbox.checked ? 'dark' : 'light';
@@ -72,8 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
   applyTheme(savedTheme);
 
+  // Ao carregar a página, aplica o estado da sidebar salvo.
+  const savedSidebarState = localStorage.getItem(SIDEBAR_STATE_KEY);
+  if (savedSidebarState === 'minimized') {
+    if (sidebar) sidebar.classList.add('minimized');
+  }
+
   // ========================================================================
-  // LÓGICA EXISTENTE DA PÁGINA
+  // LÓGICA DA APLICAÇÃO
   // ========================================================================
 
   // --- Lógica dos Modais ---
@@ -83,23 +91,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const feedbackModalOkBtn = document.getElementById('feedback-modal-ok');
 
   function showFeedbackModal(message, title = 'Sucesso') {
-    feedbackModalTitle.textContent = title;
-    feedbackModalMessage.textContent = message;
-    feedbackModal.style.display = 'flex';
-    feedbackModalOkBtn.focus();
+    if (feedbackModal) {
+      feedbackModalTitle.textContent = title;
+      feedbackModalMessage.textContent = message;
+      feedbackModal.style.display = 'flex';
+      feedbackModalOkBtn.focus();
+    }
   }
   function closeFeedbackModal() {
-    feedbackModal.style.display = 'none';
+    if (feedbackModal) feedbackModal.style.display = 'none';
   }
 
   function openChangePasswordModal() {
     inputNewPassword.value = '';
     inputConfirmPassword.value = '';
-    changePasswordModal.style.display = 'flex';
-    inputNewPassword.focus();
+    if (changePasswordModal) {
+      changePasswordModal.style.display = 'flex';
+      inputNewPassword.focus();
+    }
   }
   function closeChangePasswordModal() {
-    changePasswordModal.style.display = 'none';
+    if (changePasswordModal) changePasswordModal.style.display = 'none';
   }
 
   async function saveNewPassword() {
@@ -145,24 +157,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Lógica de Roteamento e UI ---
   function toggleMenuState() {
-    sidebar.classList.toggle('minimized');
+    if (sidebar) {
+      sidebar.classList.toggle('minimized');
+      const newState = sidebar.classList.contains('minimized') ? 'minimized' : 'maximized';
+      localStorage.setItem(SIDEBAR_STATE_KEY, newState);
+    }
   }
 
   function showDashboard() {
-    if (dashboardContent) dashboardContent.style.display = 'block';
-    if (themeSwitchWrapper) themeSwitchWrapper.style.display = 'block'; // MOSTRAR o switch
+    if (dashboardContent) dashboardContent.classList.remove('d-none');
+    if (themeSwitchWrapper) themeSwitchWrapper.classList.remove('d-none');
+    if (footer) footer.classList.remove('d-none');
+
     if (contentFrame) {
-      contentFrame.style.display = 'none';
+      contentFrame.classList.add('d-none');
       contentFrame.src = 'about:blank';
     }
     document.title = 'Painel - Repositório Secullum';
   }
 
   function showIframe(url, clickedElement) {
-    if (dashboardContent) dashboardContent.style.display = 'none';
-    if (themeSwitchWrapper) themeSwitchWrapper.style.display = 'none'; // ESCONDER o switch
+    if (dashboardContent) dashboardContent.classList.add('d-none');
+    if (themeSwitchWrapper) themeSwitchWrapper.classList.add('d-none');
+    if (footer) footer.classList.add('d-none');
+
     if (contentFrame) {
-      contentFrame.style.display = 'block';
+      contentFrame.classList.remove('d-none');
       try {
         contentFrame.contentWindow.location.replace(url);
       } catch (e) {
@@ -215,12 +235,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (changePasswordSaveBtn) {
     changePasswordSaveBtn.addEventListener('click', saveNewPassword);
   }
-  feedbackModalOkBtn.addEventListener('click', closeFeedbackModal);
-  feedbackModal.addEventListener('click', (e) => {
-    if (e.target === feedbackModal) closeFeedbackModal();
-  });
+  if (feedbackModalOkBtn) {
+    feedbackModalOkBtn.addEventListener('click', closeFeedbackModal);
+  }
+  if (feedbackModal) {
+    feedbackModal.addEventListener('click', (e) => {
+      if (e.target === feedbackModal) closeFeedbackModal();
+    });
+  }
   document.addEventListener('keyup', (e) => {
-    if (feedbackModal.style.display === 'flex' && (e.key === 'Enter' || e.key === 'Escape')) {
+    if (feedbackModal && feedbackModal.style.display === 'flex' && (e.key === 'Enter' || e.key === 'Escape')) {
       closeFeedbackModal();
     }
   });
@@ -237,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   function handleTooltipShow(e) {
-    if (sidebar.classList.contains('minimized')) {
+    if (sidebar && sidebar.classList.contains('minimized')) {
       const t = e.currentTarget;
       tooltip.textContent = t.dataset.tooltip;
       const n = t.getBoundingClientRect();

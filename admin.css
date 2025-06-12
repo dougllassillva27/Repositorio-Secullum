@@ -53,7 +53,7 @@
 
 html.dark-mode {
   /* Tema Escuro */
-  --admin-cor-fundo: #212529;
+  --admin-cor-fundo: #2c3034;
   --admin-cor-container-fundo: #2c3034;
   --admin-cor-texto-primario: #f8f9fa;
   --admin-cor-texto-secundario: #adb5bd;
@@ -82,10 +82,10 @@ body {
   background-color: var(--admin-cor-fundo);
   color: var(--admin-cor-texto-primario);
   margin: 0;
-  padding: 20px;
+  padding: 0xp;
 }
 .container {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: auto;
   background: var(--admin-cor-container-fundo);
   padding: 25px 30px;
@@ -178,15 +178,13 @@ p {
   border-color: #c82333;
 }
 .btn-salvar {
+  width: 100%;
+  margin-top: 15px;
   padding: 12px 20px;
   font-size: 1.1em;
   color: #fff;
   background-color: #28a745;
   border-color: #28a745;
-  position: fixed;
-  top: 20px;
-  right: 30px;
-  z-index: 1050;
 }
 .btn-salvar:hover {
   background-color: #218838;
@@ -426,4 +424,42 @@ input[type='checkbox'] {
 .category-block.sortable-drag {
   opacity: 0.9;
   box-shadow: 0 5px 15px var(--admin-cor-sombra);
+}
+
+/* --- Rodapé --- */
+#footer {
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 40px;
+  border-top: 1px solid var(--admin-cor-borda);
+  width: 100%;
+  display: none;
+}
+#footer p {
+  margin: 0;
+  color: var(--admin-cor-texto-secundario);
+}
+#footer a {
+  color: var(--admin-cor-titulo);
+  text-decoration: none;
+  font-weight: 600;
+}
+#footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Estilos Responsivos para Telas Menores
+   ========================================================================== */
+@media (max-width: 992px) {
+  /* Altera o layout de grid para uma única coluna */
+  .admin-main-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Remove o posicionamento fixo do formulário para que ele role com a página */
+  #form-container {
+    position: static;
+  }
 }

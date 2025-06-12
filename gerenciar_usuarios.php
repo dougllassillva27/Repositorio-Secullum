@@ -36,7 +36,7 @@ if (!is_admin()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <!-- Meta Tags Básicas -->
+    <!-- Meta Tags Básicas -->
     <meta name="description" content="Secullum Repositório" />
     <meta name="keywords" content="site, links, lanches, Secullum" />
     <meta name="author" content="Douglas Silva" />
@@ -58,7 +58,6 @@ if (!is_admin()) {
     <meta name="twitter:description" content="Secullum Repositório" />
     <title>Gerenciar Usuários</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="<?= versao("$base/admin.css") ?>">
     <link rel="stylesheet" href="<?= versao("$base/admin.css") ?>">
 </head>
 <body>
@@ -88,6 +87,13 @@ if (!is_admin()) {
                 <div id="user-list"><p>Carregando usuários...</p></div>
             </div>
         </div> 
+
+        <footer id="footer">
+            <p>
+                Desenvolvido por
+                <a href="https://www.linkedin.com/in/dougllassillva27/" target="_blank">Douglas Silva</a>
+            </p>
+        </footer>
     </div>
 
     <div id="feedback-modal" class="modal-backdrop">

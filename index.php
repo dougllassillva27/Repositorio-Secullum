@@ -67,15 +67,38 @@ function create_slug($text) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Secullum Repositório" />
+    <meta name="keywords" content="site, links, lanches, Secullum" />
+    <meta name="author" content="Douglas Silva" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Secullum Repositório" />
+    <meta property="og:description" content="Secullum Repositório" />
+    <meta property="og:url" content="https://www.dougllassillva27.com.br" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://dougllassillva27.com.br/<?= versao("$base/logo-social-share.webp") ?>">
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:site_name" content="Secullum Repositório" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Secullum Repositório" />
+    <meta name="twitter:description" content="Secullum Repositório" />
+
     <title>Repositório Secullum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="<?= versao("$base/style.css") ?>">
     <link rel="stylesheet" href="<?= versao("$base/admin.css") ?>">
 </head>
 <body>
-    <button id="menu-button" aria-label="Alternar menu"><i class="fas fa-bars"></i></button>
-    <nav id="sidebar">
-        <div class="sidebar-header"></div>
+    <nav id="sidebar" class="custom-scrollbar">
+        <div class="sidebar-header">
+            <button id="menu-button" aria-label="Alternar menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-button-text">Minimizar</span>
+            </button>
+        </div>
         <a href="#" id="home-link" class="sidebar-link" data-tooltip="Home" data-slug="home">
             <i class="fas fa-home sidebar-icon"></i><span class="link-text">Home</span>
         </a>
@@ -97,7 +120,6 @@ function create_slug($text) {
                     echo '<i class="fas ' . $iconClass . ' sidebar-icon"></i><span class="link-text">' . htmlspecialchars($link['text']) . '</span></a>';
                 }
 
-                // AQUI ADICIONAMOS O SEPARADOR APÓS CADA CATEGORIA COM LINKS
                 echo '<div class="sidebar-separator"></div>';
             }
         }
@@ -130,35 +152,46 @@ function create_slug($text) {
     </div>
 
     <main id="main-content">
-        <div id="dashboard-content">
-            <h2 class="welcome-title">Bem-vindo, <?= htmlspecialchars($_SESSION['username']) ?>!</h2>
-            <h1>Painel de Controle</h1>
-            <?php
-            if (!empty($categories)) {
-                foreach ($categories as $category) {
-                    $dashboard_links_for_category = array_filter($category['links'], fn($link) => !empty($link['showOnDashboard']));
-                    if (!empty($dashboard_links_for_category)) {
-                        $category_title = !empty($category['dashboard_name']) ? $category['dashboard_name'] : $category['name'];
-                        echo '<h2 class="dashboard-category-title">' . htmlspecialchars($category_title) . '</h2>';
-                        echo '<ul class="dashboard-link-list">';
-                        foreach ($dashboard_links_for_category as $link) {
-                            $newTabAttribute = !empty($link['openInNewTab']) ? 'data-open-in-new-tab="true"' : '';
-                            $slug = create_slug($link['dashboard_text'] ?: $link['text']);
-                            echo '<li><a href="#" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '" data-slug="' . $slug . '">' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '</a></li>';
+        <div class="content-wrapper">
+            <div id="dashboard-content" class="custom-scrollbar">
+                <div class="dashboard-inner-wrapper">
+                    <h2 class="welcome-title">Bem-vindo, <?= htmlspecialchars($_SESSION['username']) ?>!</h2>
+                    <h1>Painel de Controle</h1>
+                    <?php
+                    if (!empty($categories)) {
+                        foreach ($categories as $category) {
+                            $dashboard_links_for_category = array_filter($category['links'], fn($link) => !empty($link['showOnDashboard']));
+                            if (!empty($dashboard_links_for_category)) {
+                                $category_title = !empty($category['dashboard_name']) ? $category['dashboard_name'] : $category['name'];
+                                echo '<h2 class="dashboard-category-title">' . htmlspecialchars($category_title) . '</h2>';
+                                echo '<ul class="dashboard-link-list">';
+                                foreach ($dashboard_links_for_category as $link) {
+                                    $newTabAttribute = !empty($link['openInNewTab']) ? 'data-open-in-new-tab="true"' : '';
+                                    $slug = create_slug($link['dashboard_text'] ?: $link['text']);
+                                    echo '<li><a href="#" class="sidebar-link" data-url="' . htmlspecialchars($link['url']) . '" ' . $newTabAttribute . ' data-tooltip="' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '" data-slug="' . $slug . '">' . htmlspecialchars($link['dashboard_text'] ?: $link['text']) . '</a></li>';
+                                }
+                                echo '</ul>';
+                            }
                         }
-                        echo '</ul>';
                     }
-                }
-            }
-            ?>
+                    ?>
+                </div>
+            </div>
+            
+            <iframe 
+                id="contentFrame"
+                class="d-none" 
+                title="Conteúdo Externo" 
+                sandbox="allow-downloads allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts">
+            </iframe>
         </div>
-        
-        <iframe 
-            id="contentFrame" 
-            title="Conteúdo Externo" 
-            style="display: none;" 
-            sandbox="allow-downloads allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts">
-        </iframe>
+
+        <footer id="footer">
+            <p>
+                Desenvolvido por
+                <a href="https://www.linkedin.com/in/dougllassillva27/" target="_blank">Douglas Silva</a>
+            </p>
+        </footer>
     </main>
 
     <div id="feedback-modal" class="modal-backdrop">

@@ -36,13 +36,11 @@ if (!is_admin()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <!-- Meta Tags Básicas -->
-    <meta name="description" content="Secullum Repositório" />
+        <meta name="description" content="Secullum Repositório" />
     <meta name="keywords" content="site, links, lanches, Secullum" />
     <meta name="author" content="Douglas Silva" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:title" content="Secullum Repositório" />
     <meta property="og:description" content="Secullum Repositório" />
     <meta property="og:url" content="https://www.dougllassillva27.com.br" />
@@ -52,7 +50,6 @@ if (!is_admin()) {
     <meta property="og:image:height" content="512" />
     <meta property="og:site_name" content="Secullum Repositório" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Secullum Repositório" />
     <meta name="twitter:description" content="Secullum Repositório" />
@@ -65,8 +62,6 @@ if (!is_admin()) {
         <h1>Gerenciar Links e Categorias</h1>
         <p>Arraste os itens para reordenar. <a href="index.php" target="_blank">(Ver página principal)</a> | <a href="gerenciar_usuarios.php">(Gerenciar Usuários)</a></p>
         
-        <button id="btn-salvar-alteracoes" class="btn btn-salvar">Salvar Alterações</button>
-
         <div class="admin-main-content">
             <div id="form-container">
                 <form id="form-novo-link">
@@ -96,9 +91,17 @@ if (!is_admin()) {
                         <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display:none;">Cancelar</button>
                     </div>
                 </form>
+                <button id="btn-salvar-alteracoes" class="btn btn-salvar">Salvar Ordem</button>
             </div>
             <div id="gerenciador-links"><p>Carregando links...</p></div>
         </div> 
+
+        <footer id="footer">
+            <p>
+                Desenvolvido por
+                <a href="https://www.linkedin.com/in/dougllassillva27/" target="_blank">Douglas Silva</a>
+            </p>
+        </footer>
     </div>
 
     <div id="category-edit-modal" class="modal-backdrop">

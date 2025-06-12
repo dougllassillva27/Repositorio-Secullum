@@ -22,11 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-include_once $_SERVER['DOCUMENT_ROOT'] . '/inc/versao.php';
-$base = '/Secullum'; // Ou o valor correto para a sua aplicação
-
 // A primeira coisa que fazemos é chamar nosso session.php.
 // Isso garante que session_name() seja chamado ANTES de session_start().
+include_once $_SERVER['DOCUMENT_ROOT'] . '/inc/versao.php';
+$base = '/Secullum';
+
 require_once 'session.php'; 
 require_once 'db_connection.php';
 
@@ -91,6 +91,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <!-- Meta Tags Básicas -->
     <meta name="description" content="Secullum Repositório" />
     <meta name="keywords" content="site, links, lanches, Secullum" />
@@ -114,8 +115,36 @@ try {
 
     <title>Login - Repositório Secullum</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        html {
+            height: 100%;
+        }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #f4f7f6; 
+            display: flex; 
+            flex-direction: column; /* Organiza os itens em coluna */
+            min-height: 100%; /* Garante que o body ocupe a altura toda */
+            margin: 0; 
+        }
+        /* NOVO: Container principal para empurrar o footer para baixo */
+        main.login-main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Faz esta área ocupar todo o espaço vertical disponível */
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .login-container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+        }
         h1 { color: #0056b3; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 600; color: #495057; }
@@ -124,31 +153,59 @@ try {
         button:hover { background-color: #0056b3; }
         .error { color: #dc3545; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-top: 20px; }
         .info { color: #0c5460; background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+
+        #footer {
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            flex-shrink: 0; /* Impede que o footer encolha */
+        }
+        #footer p {
+            margin: 0;
+            color: #6c757d;
+        }
+        #footer a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        #footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Repositório Secullum</h1>
-        
-        <?php if (!empty($initial_setup_message)): ?>
-            <div class="info"><?= $initial_setup_message ?></div>
-        <?php endif; ?>
+    <main class="login-main">
+        <div class="login-container">
+            <h1>Repositório Secullum</h1>
+            
+            <?php if (!empty($initial_setup_message)): ?>
+                <div class="info"><?= $initial_setup_message ?></div>
+            <?php endif; ?>
 
-        <form action="login.php" method="POST">
-            <div class="form-group">
-                <label for="username">Usuário</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Entrar</button>
-        </form>
+            <form action="login.php" method="POST">
+                <div class="form-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
 
-        <?php if ($error_message): ?>
-            <div class="error"><?= htmlspecialchars($error_message) ?></div>
-        <?php endif; ?>
-    </div>
+            <?php if ($error_message): ?>
+                <div class="error"><?= htmlspecialchars($error_message) ?></div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <footer id="footer">
+        <p>
+            Desenvolvido por
+            <a href="https://www.linkedin.com/in/dougllassillva27/" target="_blank">Douglas Silva</a>
+        </p>
+    </footer>
 </body>
 </html>
