@@ -127,8 +127,8 @@ function create_slug($text) {
 
         <div class="sidebar-footer">
             <?php if (is_admin()): ?>
-            <a href="gerenciar_links.php" class="admin-link sidebar-link" target="_blank" title="Gerenciar Links" data-tooltip="Gerenciar Links"><i class="fas fa-link sidebar-icon"></i><span class="link-text">Gerenciar Links</span></a>
-            <a href="gerenciar_usuarios.php" class="admin-link sidebar-link" target="_blank" title="Gerenciar Usuários" data-tooltip="Gerenciar Usuários"><i class="fas fa-users-cog sidebar-icon"></i><span class="link-text">Gerenciar Usuários</span></a>
+            <a href="gerenciar_links.php" class="admin-link sidebar-link"  title="Gerenciar Links" data-tooltip="Gerenciar Links"><i class="fas fa-link sidebar-icon"></i><span class="link-text">Gerenciar Links</span></a>
+            <a href="gerenciar_usuarios.php" class="admin-link sidebar-link"  title="Gerenciar Usuários" data-tooltip="Gerenciar Usuários"><i class="fas fa-users-cog sidebar-icon"></i><span class="link-text">Gerenciar Usuários</span></a>
             <?php endif; ?>
             <a href="#" id="btn-change-password" class="admin-link sidebar-link" title="Alterar Senha" data-tooltip="Alterar Senha">
                 <i class="fas fa-key sidebar-icon"></i>

@@ -60,7 +60,7 @@ if (!is_admin()) {
 <body>
     <div class="container">
         <h1>Gerenciar Links e Categorias</h1>
-        <p>Arraste os itens para reordenar. <a href="index.php" target="_blank">(Ver página principal)</a> | <a href="gerenciar_usuarios.php">(Gerenciar Usuários)</a></p>
+        <p>Arraste os itens para reordenar. <a href="index.php" >(Ver página principal)</a> | <a href="gerenciar_usuarios.php">(Gerenciar Usuários)</a></p>
         
         <div class="admin-main-content">
             <div id="form-container">

@@ -92,13 +92,11 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Meta Tags Básicas -->
-    <meta name="description" content="Secullum Repositório" />
+        <meta name="description" content="Secullum Repositório" />
     <meta name="keywords" content="site, links, lanches, Secullum" />
     <meta name="author" content="Douglas Silva" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:title" content="Secullum Repositório" />
     <meta property="og:description" content="Secullum Repositório" />
     <meta property="og:url" content="https://www.dougllassillva27.com.br" />
@@ -108,7 +106,6 @@ try {
     <meta property="og:image:height" content="512" />
     <meta property="og:site_name" content="Secullum Repositório" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Secullum Repositório" />
     <meta name="twitter:description" content="Secullum Repositório" />
@@ -145,6 +142,11 @@ try {
             max-width: 400px; 
             text-align: center; 
         }
+        .login-logo {
+            max-width: 250px;
+            height: auto;
+            margin-bottom: 20px;
+        }
         h1 { color: #0056b3; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 600; color: #495057; }
@@ -177,6 +179,7 @@ try {
 <body>
     <main class="login-main">
         <div class="login-container">
+            <img src="<?= versao("$base/login-logo.webp") ?>" alt="Logo da Secullum" class="login-logo">
             <h1>Repositório Secullum</h1>
             
             <?php if (!empty($initial_setup_message)): ?>

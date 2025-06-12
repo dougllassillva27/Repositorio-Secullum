@@ -63,7 +63,7 @@ if (!is_admin()) {
 <body>
     <div class="container">
         <h1>Gerenciar Usuários</h1>
-        <p>Crie, edite e remova usuários do sistema. <a href="gerenciar_links.php">(Gerenciar Links)</a> | <a href="index.php" target="_blank">(Ver página principal)</a></p>
+        <p>Crie, edite e remova usuários do sistema. <a href="gerenciar_links.php">(Gerenciar Links)</a> | <a href="index.php" >(Ver página principal)</a></p>
         
         <div class="admin-main-content">
             <div id="form-container">

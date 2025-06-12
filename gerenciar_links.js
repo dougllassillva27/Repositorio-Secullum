@@ -184,21 +184,38 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateLocalDataOrder() {
-    const newCategories = [];
-    document.querySelectorAll('.category-block').forEach((catBlock) => {
-      const categoryId = catBlock.dataset.categoryId;
-      const originalCategory = localData.categories.find((c) => c.id == categoryId);
-      const newLinks = [];
-      catBlock.querySelectorAll('.grid-row').forEach((linkRow) => {
-        const linkId = linkRow.dataset.linkId;
-        const originalLink = localData.categories.flatMap((c) => c.links || []).find((l) => l.id == linkId);
-        if (originalLink) newLinks.push(originalLink);
+    // 1. Para segurança, criamos um mapa de todos os links existentes pelo ID.
+    // Isso nos dá uma fonte única e confiável para os dados de cada link.
+    const allLinksMap = new Map();
+    localData.categories.forEach((category) => {
+      (category.links || []).forEach((link) => {
+        allLinksMap.set(link.id.toString(), link);
       });
+    });
+
+    // 2. Construímos uma estrutura de categorias completamente nova baseada na ordem do DOM.
+    const newCategories = [];
+    document.querySelectorAll('.category-block').forEach((categoryElement) => {
+      const categoryId = categoryElement.dataset.categoryId;
+      const originalCategory = localData.categories.find((c) => c.id.toString() === categoryId);
+
       if (originalCategory) {
-        originalCategory.links = newLinks;
-        newCategories.push(originalCategory);
+        // Criamos uma cópia da categoria com uma lista de links vazia.
+        const updatedCategory = { ...originalCategory, links: [] };
+
+        // Populamos a lista de links com os dados corretos do nosso mapa.
+        categoryElement.querySelectorAll('.grid-row').forEach((linkElement) => {
+          const linkId = linkElement.dataset.linkId;
+          const linkData = allLinksMap.get(linkId);
+          if (linkData) {
+            updatedCategory.links.push(linkData);
+          }
+        });
+        newCategories.push(updatedCategory);
       }
     });
+
+    // 3. Substituímos os dados antigos pela nova estrutura, pronta para ser salva.
     localData.categories = newCategories;
   }
 
