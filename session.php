@@ -22,6 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+// Define o tempo de vida da sessão para 8 horas (28800 segundos)
+// Esta configuração deve vir ANTES de qualquer função de sessão (session_name, session_start)
+$tempo_de_vida_da_sessao = 28800;
+
+// Configura o tempo que a sessão fica ativa no servidor (Garbage Collector)
+ini_set('session.gc_maxlifetime', $tempo_de_vida_da_sessao);
+
+// Configura o tempo que o cookie da sessão fica ativo no navegador do usuário
+ini_set('session.cookie_lifetime', $tempo_de_vida_da_sessao);
+
 // Define um nome exclusivo para a sessão desta aplicação para evitar conflitos
 // com outras aplicações no mesmo domínio.
 session_name('RepositorioGeralSession');
