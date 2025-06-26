@@ -23,9 +23,25 @@
  * SOFTWARE.
  */
 
-// Define o tempo de vida da sessão para 8 horas (28800 segundos)
-// Esta configuração deve vir ANTES de qualquer função de sessão (session_name, session_start)
-$tempo_de_vida_da_sessao = 28800;
+// ===================================================================================
+// CONFIGURAÇÃO ROBUSTA DE SESSÃO PARA AMBIENTES DE HOSPEDAGEM COMPARTILHADA
+// ===================================================================================
+
+// PASSO 1: Definir um caminho privado e portável para salvar os arquivos de sessão.
+// A pasta ficará um nível ACIMA do diretório público (public_html), o que é mais seguro.
+// O nome 'sessions_repositorio' é para isolar desta aplicação.
+$caminho_sessoes = $_SERVER['DOCUMENT_ROOT'] . '/../sessions_repositorio';
+
+// Garante que o diretório exista. Se não, tenta criá-lo com permissões seguras (0700).
+if (!is_dir($caminho_sessoes)) {
+    mkdir($caminho_sessoes, 0700, true);
+}
+// Define o novo caminho para salvar as sessões. DEVE vir antes de session_start().
+session_save_path($caminho_sessoes);
+
+
+// PASSO 2: Definir o tempo de vida da sessão para 8 horas.
+$tempo_de_vida_da_sessao = 28800; // 8 horas em segundos
 
 // Configura o tempo que a sessão fica ativa no servidor (Garbage Collector)
 ini_set('session.gc_maxlifetime', $tempo_de_vida_da_sessao);
@@ -33,26 +49,41 @@ ini_set('session.gc_maxlifetime', $tempo_de_vida_da_sessao);
 // Configura o tempo que o cookie da sessão fica ativo no navegador do usuário
 ini_set('session.cookie_lifetime', $tempo_de_vida_da_sessao);
 
-// Define um nome exclusivo para a sessão desta aplicação para evitar conflitos
-// com outras aplicações no mesmo domínio.
+
+// PASSO 3: Definir um nome exclusivo para a sessão desta aplicação para evitar conflitos.
 session_name('RepositorioGeralSession');
 
-// Inicia a sessão se ainda não foi iniciada
+
+// PASSO 4: Iniciar a sessão (apenas se não houver uma ativa) com todas as configs aplicadas.
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Função para verificar se o usuário está logado
+
+// ===================================================================================
+// FUNÇÕES HELPER DE SESSÃO
+// ===================================================================================
+
+/**
+ * Verifica se o usuário está logado checando a existência da variável de sessão 'user_id'.
+ * @return bool
+ */
 function is_logged_in() {
     return isset($_SESSION['user_id']);
 }
 
-// Função para verificar se o usuário é administrador
+/**
+ * Verifica se o usuário logado tem a permissão de 'admin'.
+ * @return bool
+ */
 function is_admin() {
     return is_logged_in() && isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }
 
-// Função para proteger uma página. Se não estiver logado, redireciona para o login.
+/**
+ * Protege uma página, redirecionando para a tela de login caso o usuário não esteja logado.
+ * Deve ser chamada no topo de todas as páginas restritas.
+ */
 function protect_page() {
     if (!is_logged_in()) {
         header('Location: login.php');
