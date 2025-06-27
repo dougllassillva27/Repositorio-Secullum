@@ -41,7 +41,7 @@ session_save_path($caminho_sessoes);
 
 
 // PASSO 2: Definir o tempo de vida da sessão para 8 horas.
-$tempo_de_vida_da_sessao = 28800; // 8 horas em segundos
+$tempo_de_vida_da_sessao = 86400; // 8 horas em segundos
 
 // Configura o tempo que a sessão fica ativa no servidor (Garbage Collector)
 ini_set('session.gc_maxlifetime', $tempo_de_vida_da_sessao);
